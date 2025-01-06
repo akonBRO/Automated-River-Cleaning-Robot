@@ -2,12 +2,12 @@
 #include <AFMotor.h>
 #include <NewPing.h>
 
-Servo sonarServo; // Servo for sonar sensor
-#define SERVO_PIN 9 // Servo connected to motor shield's servo connector
+Servo sonarServo; 
+#define SERVO_PIN 9 
 #define TRIG_PIN A0
 #define ECHO_PIN A1
 #define MAX_DISTANCE 200
-#define MAX_SPEED 255 // Maximum speed for motors
+#define MAX_SPEED 255 
 
 #define GARBAGE_TRIG_PIN A2
 #define GARBAGE_ECHO_PIN A3
@@ -18,19 +18,19 @@ Servo sonarServo; // Servo for sonar sensor
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 NewPing garbageSonar(GARBAGE_TRIG_PIN, GARBAGE_ECHO_PIN, MAX_DISTANCE);
 
-AF_DCMotor motorLeft(1, MOTOR12_1KHZ); // Left motor
-AF_DCMotor motorRight(2, MOTOR12_1KHZ); // Right motor
-AF_DCMotor conveyorMotor1(3, MOTOR12_1KHZ); // Conveyor motor 1
-AF_DCMotor conveyorMotor2(4, MOTOR12_1KHZ); // Conveyor motor 2
+AF_DCMotor motorLeft(1, MOTOR12_1KHZ); 
+AF_DCMotor motorRight(2, MOTOR12_1KHZ);
+AF_DCMotor conveyorMotor1(3, MOTOR12_1KHZ); 
+AF_DCMotor conveyorMotor2(4, MOTOR12_1KHZ); 
 
-bool garbageFull = false; // Flag for garbage full status
-int servoDirection = 1; // Servo sweep direction (1 for right, -1 for left)
-int servoAngle = 90; // Initial angle
+bool garbageFull = false; 
+int servoDirection = 1; 
+int servoAngle = 90;
 
 void setup() {
-  Serial.begin(9600); // For debugging if needed
-  sonarServo.attach(SERVO_PIN); // Attach to the correct servo pin
-  sonarServo.write(servoAngle); // Set initial angle
+  Serial.begin(9600); 
+  sonarServo.attach(SERVO_PIN); 
+  sonarServo.write(servoAngle); 
 }
 
 void loop() {
@@ -39,9 +39,9 @@ void loop() {
   sweepServo();
   int distance = readPing();
 
-  if (distance <= 15) { // Object detected
+  if (distance <= 15) { 
     moveBackward();
-    delay(3000); // Move backward for 3 seconds
+    delay(3000);
     turnLeft();
   } else {
     moveForward();
@@ -58,28 +58,28 @@ int readPing() {
   delay(70);
   int cm = sonar.ping_cm();
   if (cm == 0) {
-    cm = 250; // Default to maximum distance if no object is detected
+    cm = 250; 
   }
   return cm;
 }
 
 void checkGarbageLevel() {
-  delay(5000); // Delay for garbage sonar sensor
+  delay(5000);
   int garbageHeight = garbageSonar.ping_cm();
-  if (garbageHeight > 0 && garbageHeight <= 10) { // Adjust threshold as per requirement
-    garbageFull = true; // Garbage bin is full
+  if (garbageHeight > 0 && garbageHeight <= 10) { 
+    garbageFull = true; 
   } else if (garbageHeight > 10) {
-    garbageFull = false; // Garbage bin is emptied
+    garbageFull = false;
   }
 }
 
 void sweepServo() {
-  servoAngle += servoDirection * 5; // Increment or decrement angle
+  servoAngle += servoDirection * 5;
   if (servoAngle >= 180 || servoAngle <= 0) {
-    servoDirection = -servoDirection; // Change direction
+    servoDirection = -servoDirection; 
   }
-  sonarServo.write(servoAngle); // Move the servo to the new angle
-  delay(100); // Adjust sweep speed
+  sonarServo.write(servoAngle); 
+  delay(100); 
 }
 
 void moveForward() {
@@ -98,11 +98,11 @@ void moveBackward() {
 }
 
 void turnLeft() {
-  motorLeft.run(RELEASE); // Stop the left motor
-  motorRight.run(BACKWARD); // Right motor moves forward
+  motorLeft.run(RELEASE);
+  motorRight.run(BACKWARD); 
   motorRight.setSpeed(MAX_SPEED);
-  delay(5000); // Adjust for turning duration
-  moveForward(); // Resume forward movement
+  delay(5000); 
+  moveForward();
 }
 
 void runConveyorBelt() {
