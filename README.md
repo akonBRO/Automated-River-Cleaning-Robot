@@ -1,6 +1,17 @@
 # Automated-River-Cleaning-Robot
 The Automatic River-Cleaning Robot uses ultrasonic sensors for obstacle detection and garbage monitoring, a conveyor belt to collect waste, and motors for autonomous navigation. It avoids collisions, adjusts movements, and stops the conveyor when the bin is full, ensuring efficient and eco-friendly river cleaning.
 
+Components used:
+Arduino Uno R3
+L293D DC Motor Driver Shield
+4x DC Gear Motor 6V TT Dual Shaft BO Motor with Wheels
+2x Sonar Sensor HC SR04
+1x Servo Servo Motor SG92R
+Jumper Wires
+PVC board
+Aluminium Pipes
+Bottles
+
 Key Features
 Sonar Sensor with Servo: Sweeps to detect obstacles and objects.
 Garbage Level Detection: Uses a separate sonar sensor to detect when the garbage bin is full.
